@@ -2,6 +2,7 @@ package com.letscode.SWRSocialNetwork.service;
 
 import com.letscode.SWRSocialNetwork.model.Inventory;
 import com.letscode.SWRSocialNetwork.repository.InventoryRepository;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import com.letscode.SWRSocialNetwork.exceptions.RebelNotFoundException;
 import com.letscode.SWRSocialNetwork.model.Rebel;
@@ -9,6 +10,7 @@ import com.letscode.SWRSocialNetwork.repository.RebelRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -31,14 +33,16 @@ public class RebelService {
     }
 
     public Rebel save(Rebel rebel) {
-  //      var rebelSaved = rebelRepository.save(rebel);
-    //    rebelSaved.getInventory().forEach((inventory) -> inventory.setRebel(rebelSaved));
+        var rebelSaved = rebelRepository.save(rebel);
+        rebelSaved.getInventory().forEach((inventory) -> inventory.setRebel(rebelSaved));
 //        for (Inventory inventory : rebel.getInventory()){
 //
-//            inventory.setRebel(new Rebel().toBuilder().id(rebelSaved.getId()).build());
+//            inventory.setRebel(rebelSaved);
 //        }
-        //inventoryRepository.saveAll(rebel.getInventory());
-        return rebelRepository.save(rebel);//rebelSaved;
+        inventoryRepository.saveAll(rebel.getInventory());
+        //System.out.println("QTD de inventário: " + rebel.getInventory().size());
+        //System.out.println(ArrayUtils.toString(rebel.getInventory().toArray()));
+        return rebelSaved;
     }
 
     public void delete(Integer id) {
@@ -63,10 +67,10 @@ public class RebelService {
             build.genre((rebelNew.getGenre()));
         if ( rebelNew.getAge() != null )
             build.age(rebelNew.getAge());
-        if (rebelNew.getLocation() != null)
-            build.location(rebelNew.getLocation());
-        if (rebelNew.getInventories() != null)
-            build.inventories(rebelNew.getInventories());
+        //if (rebelNew.getLocation() != null)
+            //build.location(rebelNew.getLocation());
+        if (rebelNew.getInventory() != null)
+            build.inventory(rebelNew.getInventory());
         if (rebelNew.getTraitor() != null)
             build.traitor(rebelNew.getTraitor());
         return build.build();

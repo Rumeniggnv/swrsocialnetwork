@@ -22,10 +22,10 @@ public record RebelDTO(
         Genre genre,
         @NotNull
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        Location location,
+        List<Inventory> inventory,
         @NotNull
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        List<Inventory> inventories,
+        Location location,
         @NotNull
         Integer traitor
 ) {

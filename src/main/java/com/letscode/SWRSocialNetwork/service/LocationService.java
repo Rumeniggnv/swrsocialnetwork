@@ -4,7 +4,7 @@ import com.letscode.SWRSocialNetwork.repository.LocationRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@Service
+//@Service
 @AllArgsConstructor
 public class LocationService {
     private final LocationRepository locationRepository;

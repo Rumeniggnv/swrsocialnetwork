@@ -21,7 +21,7 @@ public class Location {
     private String galaxyName;
     private Integer latitude;
     private Integer longitude;
-    @OneToMany(mappedBy = "location", fetch= FetchType.EAGER)
+    @OneToMany(mappedBy = "location", cascade= CascadeType.PERSIST, fetch= FetchType.EAGER)
     private Collection<Rebel> rebels;
 
 

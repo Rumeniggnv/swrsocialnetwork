@@ -4,6 +4,8 @@ package com.letscode.SWRSocialNetwork.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -13,16 +15,19 @@ import java.util.List;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Rebel {
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+public class Rebel implements Serializable {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
     private Integer age;
     private Genre genre;
+
+    @OneToMany(mappedBy="rebel")
+    private List<Inventory> inventory = new ArrayList<>();
+
     @ManyToOne(cascade=CascadeType.PERSIST)
     private Location location;
-    @OneToMany(cascade= CascadeType.PERSIST, mappedBy = "rebel", fetch= FetchType.EAGER)
-    private List<Inventory> inventories;
+
 
     private Integer traitor;
 }
