@@ -34,12 +34,12 @@ public class RebelService {
 
     public Rebel save(Rebel rebel) {
         var rebelSaved = rebelRepository.save(rebel);
-        rebelSaved.getInventory().forEach((inventory) -> inventory.setRebel(rebelSaved));
+        //rebelSaved.getInventory().forEach((inventory) -> inventory.setRebel(rebelSaved));
 //        for (Inventory inventory : rebel.getInventory()){
 //
 //            inventory.setRebel(rebelSaved);
 //        }
-        inventoryRepository.saveAll(rebel.getInventory());
+        //inventoryRepository.saveAll(rebel.getInventory());
         //System.out.println("QTD de inventário: " + rebel.getInventory().size());
         //System.out.println(ArrayUtils.toString(rebel.getInventory().toArray()));
         return rebelSaved;
@@ -69,8 +69,8 @@ public class RebelService {
             build.age(rebelNew.getAge());
         //if (rebelNew.getLocation() != null)
             //build.location(rebelNew.getLocation());
-        if (rebelNew.getInventory() != null)
-            build.inventory(rebelNew.getInventory());
+        if (rebelNew.getInventories() != null)
+            build.inventories(rebelNew.getInventories());
         if (rebelNew.getTraitor() != null)
             build.traitor(rebelNew.getTraitor());
         return build.build();

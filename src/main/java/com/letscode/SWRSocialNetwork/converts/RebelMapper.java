@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.beans.BeanProperty;
 
-//@Component
+@Component
 @Mapper(componentModel = "spring")
 public interface RebelMapper {
 

@@ -21,12 +21,11 @@ public record RebelDTO(
         @NotNull
         Genre genre,
         @NotNull
-        @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        List<Inventory> inventory,
+        Integer traitor,
         @NotNull
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
         Location location,
         @NotNull
-        Integer traitor
-) {
-}
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
+        List<Inventory> inventories
+) { }

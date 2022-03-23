@@ -3,6 +3,7 @@ package com.letscode.SWRSocialNetwork.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serial;
 import java.io.Serializable;
 
 @Entity
@@ -11,6 +12,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Inventory implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue
@@ -19,6 +22,5 @@ public class Inventory implements Serializable {
     private Integer quantity;
 
     @ManyToOne(cascade=CascadeType.PERSIST)
-    @JoinColumn(name = "rebel_id")
     private Rebel rebel;
 }
