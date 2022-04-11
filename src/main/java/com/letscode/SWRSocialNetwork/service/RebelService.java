@@ -1,6 +1,7 @@
 package com.letscode.SWRSocialNetwork.service;
 
 import com.letscode.SWRSocialNetwork.model.Inventory;
+import com.letscode.SWRSocialNetwork.model.Location;
 import com.letscode.SWRSocialNetwork.repository.InventoryRepository;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
@@ -8,8 +9,13 @@ import com.letscode.SWRSocialNetwork.exceptions.RebelNotFoundException;
 import com.letscode.SWRSocialNetwork.model.Rebel;
 import com.letscode.SWRSocialNetwork.repository.RebelRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,10 +26,12 @@ public class RebelService {
     private final RebelRepository rebelRepository;
     private final InventoryRepository inventoryRepository;
 
-    public List<Rebel> getAll() {
-        return (List<Rebel>) rebelRepository.findAll();
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public Page<Rebel> getAll(Pageable pageable) {
+        return rebelRepository.findAll(pageable);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Rebel getById( Integer id) {
         var optionalRebel = rebelRepository.findById( id );
         if ( optionalRebel.isPresent() ) {
@@ -32,6 +40,8 @@ public class RebelService {
         throw new RebelNotFoundException();
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Transactional
     public Rebel save(Rebel rebel) {
         var rebelSaved = rebelRepository.save(rebel);
         //rebelSaved.getInventory().forEach((inventory) -> inventory.setRebel(rebelSaved));
@@ -45,6 +55,8 @@ public class RebelService {
         return rebelSaved;
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Transactional
     public void delete(Integer id) {
         if ( !rebelRepository.existsById( id ) ) {
             throw new RebelNotFoundException("Rebel does not exist!");
@@ -52,27 +64,25 @@ public class RebelService {
         rebelRepository.deleteById( id );
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @Transactional
     public Rebel update(Rebel rebel, Integer rebelId) {
-        return rebelRepository.findById( rebelId )
-                .map( rebelOld -> merge( rebelOld, rebel ) )
+        /*return rebelRepository.findById( rebelId )
+                .map(rebelOld -> merge( rebelOld, rebel ) )
                 .map(rebelRepository::save)
-                .orElseThrow(RebelNotFoundException::new);
+                .orElseThrow(RebelNotFoundException::new);*/
+        Rebel rebelUpdate = getById( rebelId );
+        BeanUtils.copyProperties(rebel, rebelUpdate);
+        return rebelRepository.save(rebelUpdate);
     }
 
-    private Rebel merge( Rebel rebelOld, Rebel rebelNew ) {
-        var build = rebelOld.toBuilder();
-        if ( StringUtils.isNotEmpty(rebelNew.getName()))
-            build.name(rebelNew.getName());
-        if (rebelNew.getGenre() != null)
-            build.genre((rebelNew.getGenre()));
-        if ( rebelNew.getAge() != null )
-            build.age(rebelNew.getAge());
-        //if (rebelNew.getLocation() != null)
-            //build.location(rebelNew.getLocation());
-        if (rebelNew.getInventories() != null)
-            build.inventories(rebelNew.getInventories());
-        if (rebelNew.getTraitor() != null)
-            build.traitor(rebelNew.getTraitor());
-        return build.build();
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @Transactional
+    public Rebel update(Location location, Integer id) {
+        Rebel rebel = this.getById( id );
+        rebel.setLocation( location );
+        return rebelRepository.save( rebel );
     }
+
+
 }

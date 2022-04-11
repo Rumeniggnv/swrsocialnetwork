@@ -1,5 +1,6 @@
 package com.letscode.SWRSocialNetwork.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -17,10 +18,11 @@ public class Inventory implements Serializable {
 
     @Id
     @GeneratedValue
-    private Integer id;
+    private Long id;
     private Resource resource;
     private Integer quantity;
 
     @ManyToOne(cascade=CascadeType.PERSIST)
+    @JsonIgnore
     private Rebel rebel;
 }
